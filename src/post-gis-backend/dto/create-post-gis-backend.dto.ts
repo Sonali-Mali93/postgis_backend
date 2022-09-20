@@ -1,17 +1,24 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Index } from 'typeorm';
+import { Point } from 'geojson';
 export class CreatePostGisBackendDto {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: '' })
-  latitude: string;
+  @Column({ type: 'decimal', default: '' })
+  latitude: number;
 
-  @Column({ default: '' })
-  longitude: string;
+  @Column({ type: 'decimal', default: '' })
+  longitude: number;
 
-  @Column({ default: '' })
+  @Column({ nullable: true })
   cityname: string;
 
-  @Column({ default: '' })
-  geography: string;
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
+  geography: Point;
 }
