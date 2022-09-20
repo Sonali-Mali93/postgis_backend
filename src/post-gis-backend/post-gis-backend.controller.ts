@@ -31,6 +31,14 @@ export class PostGisBackendController {
     return this.postGisBackendService.findAll();
   }
 
+  @Post('/store-data')
+  // @UseInterceptors(
+  //   FileInterceptor('file_asset', {
+  //     storage: diskStorage({
+  //       destination: './files',
+  //     }),
+  //   }),
+  // )
   async uploadFile() {
     const csvFile = readFileSync('files/1.csv');
     const csvData = csvFile.toString();
@@ -40,37 +48,36 @@ export class PostGisBackendController {
       transformHeader: (header) => header.toLowerCase().replace('#', '').trim(),
       complete: (results) => results.data,
     });
-    console.log(parsedCsv);
-    console.log('parsedCsv', parsedCsv.data);
-    const add = {
-      latitude: parsedCsv.data[0].latitude,
-      longitude: parsedCsv.data[0].longitude,
-      cityname: parsedCsv.data[0].cityname,
-
-    };
-    console.log('Data: ', add);
-
-    return this.postGisBackendService.create(add);
-
-
-    // @Post()
-    // create(@Body() createPostGisBackendDto: CreatePostGisBackendDto) {
-    //   return this.postGisBackendService.create(createPostGisBackendDto);
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.postGisBackendService.findOne(+id);
-    // }
-
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updatePostGisBackendDto: UpdatePostGisBackendDto) {
-    //   return this.postGisBackendService.update(+id, updatePostGisBackendDto);
-    // }
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.postGisBackendService.remove(+id);
-    // }
+    let add = {};
+    for (let ele of parsedCsv.data) {
+      var point = { type: 'Point', coordinates: [ele.latitude, ele.longitude] };
+      add = {
+        latitude: ele.latitude,
+        longitude: ele.longitude,
+        cityname: ele.cityname,
+        geography: point,
+      };
+      console.log(this.postGisBackendService.create(add));
+    }
+    return 'Data Added Successfully!';
   }
+  // @Post()
+  // create(@Body() createPostGisBackendDto: CreatePostGisBackendDto) {
+  //   return this.postGisBackendService.create(createPostGisBackendDto);
+  // }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.postGisBackendService.findOne(+id);
+  // }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updatePostGisBackendDto: UpdatePostGisBackendDto) {
+  //   return this.postGisBackendService.update(+id, updatePostGisBackendDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.postGisBackendService.remove(+id);
+  // }
 }
