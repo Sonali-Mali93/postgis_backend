@@ -1,9 +1,7 @@
 export class PostGis {
-    id?: string;
-    latitude?: string;
-    longitude?: string;
-    mobile?: number;
-    cityname?: string;
-    geography: string;
-  }
-  
+  id?: number;
+  latitude?: number;
+  longitude?: number;
+  cityname?: string;
+  geography?: string;
+}
