@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Point } from 'geojson';
 
 @Entity('geographydata')
@@ -12,9 +12,15 @@ export class PostGisBackend {
   @Column({ type: 'decimal', default: null })
   longitude: number;
 
-  @Column({ default: '' })
+  @Column({ nullable: true })
   cityname: string;
 
-  @Column({ type: 'geography', nullable: true })
+  @Index({spatial: true})
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
   geography: Point;
 }
