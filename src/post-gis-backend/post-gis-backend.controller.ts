@@ -9,14 +9,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { PostGisBackendService } from './post-gis-backend.service';
-import { CreatePostGisBackendDto } from './dto/create-post-gis-backend.dto';
-import { UpdatePostGisBackendDto } from './dto/update-post-gis-backend.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { readFileSync } from 'fs';
 import { parse } from 'papaparse';
+import { Parcel } from './entities/polygon.entity';
+// import { polygonEntity } from './entities/polygon.entity';
 
-@Controller('post-gis-backend')
+@Controller('backend')
 export class PostGisBackendController {
   constructor(private readonly postGisBackendService: PostGisBackendService) {}
 
@@ -57,10 +57,25 @@ export class PostGisBackendController {
         cityname: ele.cityname,
         geography: point,
       };
+
       console.log(this.postGisBackendService.create(add));
     }
     return 'Data Added Successfully!';
   }
+
+  @Post('polygon')
+  async createParcelPoint(
+    @Body()
+    createParcelPointDto: Parcel,
+  ): Promise<Parcel> {
+    console.log(createParcelPointDto);
+    return this.postGisBackendService.createParcel(createParcelPointDto);
+  }
+  @Get('polygon')
+  polygon() {
+    return this.postGisBackendService.findAllPolygon();
+  }
+
   // @Post()
   // create(@Body() createPostGisBackendDto: CreatePostGisBackendDto) {
   //   return this.postGisBackendService.create(createPostGisBackendDto);
