@@ -14,6 +14,7 @@ import { diskStorage } from 'multer';
 import { readFileSync } from 'fs';
 import { parse } from 'papaparse';
 import { Parcel } from './entities/polygon.entity';
+import { linestringentity } from './entities/linestring.entity';
 // import { polygonEntity } from './entities/polygon.entity';
 
 @Controller('backend')
@@ -75,7 +76,16 @@ export class PostGisBackendController {
   polygon() {
     return this.postGisBackendService.findAllPolygon();
   }
-
+  @Post('/linestring')
+  async linePoint(@Body()
+  createlinePointDto: linestringentity): Promise<linestringentity> {
+    console.log(createlinePointDto)
+    return this.postGisBackendService.createLinePoint(createlinePointDto)
+  }
+  @Get('/linestring')
+  lineStringData() {
+    return this.postGisBackendService.lineString()
+  }
   // @Post()
   // create(@Body() createPostGisBackendDto: CreatePostGisBackendDto) {
   //   return this.postGisBackendService.create(createPostGisBackendDto);
