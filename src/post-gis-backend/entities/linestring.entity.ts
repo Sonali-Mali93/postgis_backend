@@ -1,26 +1,24 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { Polygon } from 'geojson';
-//import { IsOptional } from "@nestjs/class-validator"
+//  import {LineString} from "geojson";
+import { MultiLineString } from 'geojson';
 import { IsOptional } from 'class-validator';
-@Entity({ name: 'PolygonTable' })
-export class Parcel {
+@Entity('MultiLineString')
+export class linestringentity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: '', nullable: true })
-  // @Column()
-  cityname: string;
+  @Column({ nullable: true })
+  City_Name: string;
 
   @Index({ spatial: true })
   @Column({
     type: 'geography',
-    spatialFeatureType: 'Polygon',
+    //  spatialFeatureType:'MultiLineString',
     srid: 4326,
     nullable: true,
   })
-  polygon: Polygon;
+  lineString: MultiLineString;
 
   @IsOptional()
   coordinates?: number[][];
-  // coordinates?: number[][]
 }
