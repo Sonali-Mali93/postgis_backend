@@ -8,6 +8,7 @@ export class Parcel {
   id: number;
 
   @Column({ default: '', nullable: true })
+  // @Column()
   cityname: string;
 
   @Index({ spatial: true })
